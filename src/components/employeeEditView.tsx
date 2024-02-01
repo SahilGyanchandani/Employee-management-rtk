@@ -29,9 +29,8 @@ export default function EmployeeEditView() {
                 department: employeeToEdit.department,
                 experience: employeeToEdit.experience
             });
-
         }
-        else {
+        else if (employeeToEdit?.id == null) {            
             setError("Employee not found");
         }
 
