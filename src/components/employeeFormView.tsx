@@ -1,32 +1,49 @@
-import React, { ChangeEvent, useState } from "react";
-import { useAppDispatch } from "../app/hooks";
-import { addEmployee } from "../features/employee/employeeSlice";
-import { useNavigate } from "react-router-dom";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { addEmployee, editEmployee } from "../features/employee/employeeSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 
-export default function EmployeeAddView() {
+export default function EmployeeFormView() {
     // Access the dispatch and navigate functions from React hooks
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const employees = useAppSelector((state) => state.emp)
+
+    // Extract the employee ID parameter from the URL
+    const {eId} =useParams();
+
+    const isEditing = !!eId;
+    const initialEmployee=isEditing ? employees.find(emp => emp.id === eId) : null;
 
     // State variables to manage employee data and error message
-    const [employeeData, setEmployeeData] = useState({ id: "", fullName: "", birthDate: "", department: "", experience: 0 });
+    const [employeeData, setEmployeeData] = useState({
+        fullName: initialEmployee ? initialEmployee.fullName : "",
+        birthDate: initialEmployee ? initialEmployee.birthDate : "",
+        department: initialEmployee ? initialEmployee.department : "",
+        experience: initialEmployee ? initialEmployee.experience : 0,
+    });
     const [error, setError] = useState('');
+    const [formError,setFormError]=useState('');
+
+    useEffect(()=>{
+        if(isEditing && !initialEmployee){
+            setFormError('Employee not Found');
+        }
+    },[isEditing,initialEmployee]);
 
     // Function to handle the addition of a new employee
-    function handleAddEmployee(e: React.FormEvent) {
-        e.preventDefault()
-        // Dispatch the addEmployee action with the current employeeData
-        dispatch(addEmployee(employeeData));
-
-        // Clear the form after submission
-        setEmployeeData({
-            id: "",
-            fullName: "",
-            birthDate: "",
-            department: "",
-            experience: 0,
-        });
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        if(isEditing){
+            dispatch(editEmployee({id:eId,...employeeData}))
+            alert('Employee updated successfully');
+        }
+        else{
+            dispatch(addEmployee({id:'',...employeeData}));
+            alert('Employee added successfully');
+        }
+        navigate('/');
     }
 
     // Function to handle changes in the Full Name input
@@ -49,8 +66,11 @@ export default function EmployeeAddView() {
     }
     return (
         <div className="container mt-5">
-            <h2 className="mb-4">Add Employee</h2>
+            <h2 className="mb-4">{isEditing ? "Edit" : "Add"} Employee</h2>
             <form>
+                {/* Display form error message if there is an error */}
+                {formError && <div className="text-danger">{formError}</div>}
+                
                 {/* Input field for Full Name */}
                 <div className="mb-3">
                     <label className="form-label">Full Name:</label>
@@ -104,8 +124,8 @@ export default function EmployeeAddView() {
                 </div>
 
                 {/* Button to add a new employee */}
-                <button type="button" className="btn btn-primary" onClick={handleAddEmployee}>
-                    Add Employee
+                <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                    {isEditing ? "Edit":"Add" } Employee
                 </button>
 
                 <hr />

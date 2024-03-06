@@ -1,8 +1,7 @@
 import './App.css'
-import EmployeeAddView from './components/employeeAddView'
-import EmployeeEditView from './components/employeeEditView'
 import EmployeeListView from './components/employeeGetView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import EmployeeFormView from './components/employeeFormView'
 
 
 function App() {
@@ -12,9 +11,9 @@ function App() {
       <h1>Redux-Toolkit Project</h1>
       <Router>
         <Routes>
-          <Route path='/add' element={<EmployeeAddView />} />
+          <Route path='/employee/:eId?' element={<EmployeeFormView />} />
           <Route path='/' element={<EmployeeListView />} />
-          <Route path='/edit/:eId' element={<EmployeeEditView />} />
+          {/* <Route path='/edit/:eId' element={<EmployeeEditView />} /> */}
         </Routes>
       </Router>
     </>

@@ -4,7 +4,7 @@ export type Employee = {
     id: string;
     fullName: string;
     birthDate: string;
-    department: any;
+    department: string;
     experience: number;
 };
 
@@ -15,7 +15,7 @@ type InitialState = {
 const initialEmployee: Employee = {
     id: '1',
     fullName: 'Sahil Gyanchandani',
-    birthDate: '05/07/2002',
+    birthDate: '2002-07-05',
     department: 'I.T',
     experience: 1
 }

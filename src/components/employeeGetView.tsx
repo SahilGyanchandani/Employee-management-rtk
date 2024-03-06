@@ -26,7 +26,7 @@ export default function EmployeeListView() {
         <div>
             <h2>Employee List</h2>
             {/* Link to navigate to the Add Employee page */}
-            <Link to={"/add"}>
+            <Link to={"/employee"}>
                 <button>Add Employee</button>
             </Link>
             <table className="table">
@@ -49,7 +49,7 @@ export default function EmployeeListView() {
                             <td>{data.experience}</td>
                             <td>
                                 {/* Link to navigate to the Edit Employee page */}
-                                <Link to={`/edit/${(data.id)}`}>
+                                <Link to={`/employee/${(data.id)}`}>
                                     <button className="btn btn-primary">Edit</button>
                                 </Link>
                                 {/* Button to handle delete action */}
